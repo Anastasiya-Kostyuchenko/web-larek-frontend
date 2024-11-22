@@ -1,24 +1,24 @@
 import { Product, Order } from './models';
 
 export interface ProductCatalogView {
-    displayProducts(products: Product[]): void;
-    onProductClick(productId: string): void;
+	displayProducts(products: Product[]): void;
+	onProductClick(handler: (productId: string) => void): void;
 }
 
 export interface CartView {
-    displayCartItems(items: Product[]): void;
-    onAddToCart(productId: string): void;
-    onRemoveFromCart(productId: string): void;
+	displayCartItems(items: Product[]): void;
+	onAddButtonClick(handler: (productId: string) => void): void;
+	onRemoveButtonClick(handler: (productId: string) => void): void;
 }
 
 export interface OrderView {
-    displayOrderForm(): void;
-    onOrderSubmit(order: Order): void;
-    showOrderConfirmation(): void;
-    showValidationError(message: string): void;
+	displayOrderForm(): void;
+	onOrderSubmit(handler: (order: Order) => void): void;
+	showOrderConfirmation(): void;
+	showValidationError(message: string): void;
 }
 
 export interface ModalView {
-    showModal(content: string): void;
-    closeModal(): void;
+	showModal(content: string): void;
+	closeModal(): void;
 }
