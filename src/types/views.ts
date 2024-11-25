@@ -6,9 +6,8 @@ export interface ProductCatalogView {
 }
 
 export interface CartView {
-	displayCartItems(items: Product[]): void;
-	onAddButtonClick(handler: (productId: string) => void): void;
-	onRemoveButtonClick(handler: (productId: string) => void): void;
+	updateCartContent(markup: string): void;
+	onCartInteraction(handler: (event: Event) => void): void;
 }
 
 export interface OrderView {
