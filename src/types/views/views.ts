@@ -1,4 +1,4 @@
-import { Product, Order } from './models';
+import { Product, Order } from '../model/models';
 
 export interface ProductCatalogView {
 	displayProducts(products: Product[]): void;

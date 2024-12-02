@@ -1,6 +1,6 @@
-export * from './types/api';
-export * from './types/models';
-export * from './types/views';
+export * from './types/model/api';
+export * from './types/model/models';
+export * from './types/views/views';
 export * from './types/base';
 export * from './types/events';
 
