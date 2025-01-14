@@ -6,22 +6,17 @@ export * from './types/events';
 
 import './scss/styles.scss';
 
-interface Product {
-	id: string;
-	name: string;
-	description: string;
-	price: number;
-	stock: number;
-}
+import { RealApiClient } from './types/api';
+import { ProductModel } from './types/model/ProductModel';
+import { ProductView } from './types/views/ProductView';
+import { ProductPresenter } from './types/ ProductPresenter';
+import { API_URL } from './utils/constants';
 
-interface Order {
-	items: Product[];
-	address: string;
-	email: string;
-	phone: string;
-	paymentMethod: string;
-}
-interface Cart {
-	items: Product[];
-	totalPrice: number;
-}
+const apiClient = new RealApiClient(API_URL);
+
+const productModel = new ProductModel();
+const galleryContainer = document.querySelector('.gallery') as HTMLElement;
+const productView = new ProductView(galleryContainer as HTMLElement);
+
+const productPresenter = new ProductPresenter(productModel, productView);
+productPresenter.init();
