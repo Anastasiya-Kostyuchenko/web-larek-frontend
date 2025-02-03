@@ -60,8 +60,8 @@ export function renderBasket(): void {
 }
 
 export function removeFromCart(index: number): void {
-	cartItems.splice(index, 1); // Удалить товар по индексу
-	updateCartView(); // Обновить отображение корзины
+	cartItems.splice(index, 1);
+	updateCartView();
 }
 function updateCartView(): void {
 	renderBasket();
