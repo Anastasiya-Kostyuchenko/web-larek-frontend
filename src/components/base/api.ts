@@ -1,19 +1,4 @@
-export interface ApiProduct {
-	id: string;
-	name: string;
-	description: string;
-	price: number;
-	stock: number;
-}
-
-export interface ApiOrder {
-	id: string;
-	items: ApiProduct[];
-	address: string;
-	email: string;
-	phone: string;
-	paymentMethod: string;
-}
+const baseUrl = process.env.API_ORIGIN;
 
 export type ApiListResponse<Type> = {
 	total: number;
@@ -38,9 +23,10 @@ export class Api {
 
 	protected handleResponse(response: Response): Promise<object> {
 		if (response.ok) return response.json();
-		return response
-			.json()
-			.then((data) => Promise.reject(data.error ?? response.statusText));
+		else
+			return response
+				.json()
+				.then((data) => Promise.reject(data.error ?? response.statusText));
 	}
 
 	get(uri: string) {
@@ -56,24 +42,5 @@ export class Api {
 			method,
 			body: JSON.stringify(data),
 		}).then(this.handleResponse);
-	}
-}
-
-export class RealApiClient extends Api {
-	constructor(baseUrl: string) {
-		super(baseUrl);
-	}
-
-	async getProducts(): Promise<ApiProduct[]> {
-		const response = await this.get('/products');
-		return (response as ApiListResponse<ApiProduct>).items;
-	}
-
-	async getProductById(id: string): Promise<ApiProduct> {
-		return this.get(`/products/${id}`) as Promise<ApiProduct>;
-	}
-
-	async createOrder(order: ApiOrder): Promise<void> {
-		await this.post('/orders', order, 'POST');
 	}
 }

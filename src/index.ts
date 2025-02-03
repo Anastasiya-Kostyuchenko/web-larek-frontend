@@ -1,22 +1,14 @@
-export * from './types/api';
-export * from './types/models';
-export * from './types/views';
-export * from './types/base';
-export * from './types/events';
-
 import './scss/styles.scss';
-
-import { RealApiClient } from './types/api';
-import { ProductModel } from './types/model/ProductModel';
-import { ProductView } from './types/views/ProductView';
-import { ProductPresenter } from './types/ ProductPresenter';
-import { API_URL } from './utils/constants';
-
-const apiClient = new RealApiClient(API_URL);
-
-const productModel = new ProductModel();
-const galleryContainer = document.querySelector('.gallery') as HTMLElement;
-const productView = new ProductView(galleryContainer as HTMLElement);
-
-const productPresenter = new ProductPresenter(productModel, productView);
-productPresenter.init();
+import './types/index';
+import './components/base/model';
+import './types/index';
+import './components/base/api';
+import '../src/components/card';
+import '../src/components/page';
+import './components/IApi';
+import './components/modalMeneger';
+import './components/basket';
+import './components/order';
+import './components/success';
+import './components/base/events';
+import './components/IApi';
