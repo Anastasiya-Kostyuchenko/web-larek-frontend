@@ -1,70 +1,86 @@
-export interface IProduct {
-	id: string;
-	title: string;
-	description: string;
-	price: number;
-	image: string;
-	isAvailable: boolean;
-	category: string;
+export interface IPage {
+  counter: number;
+  catalogue: HTMLElement[];
+  locked: boolean;
 }
 
-export type CartItem = {
-	id: string;
-	title: string;
-	price: string;
-	quantity: number;
-	imageUrl: string;
+export interface IProducts {
+  items: IProduct[];
+}
+
+export interface ISuccess {
+  total: number;
+}
+
+export interface IProduct {
+  description?: string;
+  id: string;
+  image: string;
+  title: string;
+  category: string;
+  price: number | null;
+}
+
+export interface IOrder extends IContact {
+  total: number;
+  items: string[];
+  payment: string;
+  address: string;
+}
+
+export interface IOrderForm extends ContactsError, OrderError{}
+
+export interface IOrderResult {
+  id: string;
+  total: number;
+}
+
+export interface IContact {
+  email: string;
+  phone: string;
+}
+
+export interface IBasket {
+  items: HTMLElement[];
+  total: number;
+  selected: string[];
+}
+
+
+
+export interface IAction {
+  onClick: () => void;
+}
+
+
+export interface IActionEvent {
+  onClick: (evt: MouseEvent) => void;
+}
+
+
+export type OrderError = {
+  address?: string;
+  payment?: string;
 };
 
-export type PaymentMethod = 'cash' | 'card';
-export interface Order {
-	payment: PaymentMethod;
-	email: string;
-	phone: string;
-	address: string;
-	items: string[];
-	total: number;
+export type ContactsError = {
+  email?: string;
+  phone?: string;
+};
+
+
+
+
+export interface IOrdersForm extends IState {
+  items: string[];
+  total: number;
+  address: string;
+  payment: string;
+  email: string;
+  phone: string;
 }
 
-export interface OrderResult {
-	id: string;
-	total: number;
-}
-
-export interface Success {
-	total: number;
-}
-
-export interface IModalState {
-	isOpen: boolean;
-	title?: string;
-	content?: string;
-}
-
-export interface CustomerData {
-	email: string;
-	phone: string;
-}
-
-//интерфейс отображений
-export interface ProductCardProps {
-	product: IProduct;
-	onAddToCart: (productId: string) => void;
-	onViewDetails: (productId: string) => void;
-}
-
-//корзина
-export interface Basket {
-	items: CartItem[];
-	onRemoveItem: (productId: string) => void;
-	onCheckout: () => void;
-}
-
-//оформление заказа
-export interface CheckoutFormProps {
-	customerData: CustomerData;
-	address: string;
-	paymentMethod: string;
-	onSubmit: (order: Order) => void;
-	onValidationError: (error: string) => void;
+export interface IState {
+  validation: boolean;
+  errors: string[];
 }

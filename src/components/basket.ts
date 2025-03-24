@@ -1,58 +1,83 @@
-import { IProduct } from '../types';
-import { IEvents } from './base/events';
+import { IBasket, IAction } from '../types';
+import { ensureElement, createElement } from '../utils/utils';
+import { Component } from './base/abstract';
+import { EventEmitter } from './base/events';
+import { Card } from './card';
+import { elements } from '../utils/constants';
 
-export class Basket {
-	items: IProduct[] = [];
-	total: number = 0;
+export class Basket extends Component<IBasket> {
+	protected _list: HTMLElement;
+	protected _total: HTMLElement;
+	protected _button: HTMLElement;
 
-	constructor(private events: IEvents) {
-		this.events.on('basket:change', this.updateBasket.bind(this));
+	constructor(container: HTMLElement, protected events: EventEmitter) {
+		super(container);
+
+		const getElement = (selector: string) => ensureElement<HTMLElement>(selector, this.container);
+
+		this._list = getElement(elements.basket.list);
+		this._total = getElement(elements.basket.total);
+		this._button = getElement(elements.basket.button);
+
+
+		this._button.addEventListener('click', () => {
+			events.emit('order:open');
+		});
+
+		this.items = [];
 	}
 
-	addItem(item: IProduct) {
-		this.items.push(item);
-		this.calculateTotal();
-		this.events.emit('basket:change');
-	}
-
-	removeItem(item: IProduct) {
-		const index = this.items.findIndex((i) => i.id === item.id);
-		if (index !== -1) {
-			this.items.splice(index, 1);
-			this.calculateTotal();
-			this.events.emit('basket:change');
+	set items(items: HTMLElement[]) {
+		if (items.length) {
+			this._list.replaceChildren(...items);
+		} else {
+			this._list.replaceChildren(
+				createElement<HTMLParagraphElement>('p', {
+					textContent: `Корзина пуста`,
+				})
+			);
 		}
 	}
 
-	// Метод обновления корзины
-	updateBasket() {
-		console.log('Корзина обновлена:', this.items, 'Общая сумма:', this.total);
+	get items(): HTMLElement[] {
+		if (this._list.childElementCount === 0) {
+			return [
+				createElement<HTMLParagraphElement>('p', {
+					textContent: `Корзина пуста`,
+				}),
+			];
+		}
+		return Array.from(this._list.children) as HTMLElement[];
 	}
 
-	calculateTotal() {
-		this.total = this.items.reduce((sum, item) => sum + item.price, 0);
+	set selected(items: string[]) {
+		if (items.length) {
+			this.setDisabled(this._button, false);
+		} else {
+			this.setDisabled(this._button, true);
+		}
 	}
 
-	render(): HTMLElement {
-		const basketContainer = document.createElement('div');
-		basketContainer.classList.add('basket');
+	set total(total: number) {
+		this.setText(this._total, total + ' синапсов');
+	}
+}
 
-		const title = document.createElement('h2');
-		title.textContent = `Корзина (${this.items.length} товаров)`;
-		basketContainer.appendChild(title);
+export type IBasketIndex = {
+	index: number;
+};
 
-		const list = document.createElement('ul');
-		this.items.forEach((item) => {
-			const li = document.createElement('li');
-			li.textContent = `${item.title} - ${item.price} руб.`;
-			list.appendChild(li);
-		});
-		basketContainer.appendChild(list);
+export class BasketItem extends Card<IBasketIndex> {
+	protected _index: HTMLElement;
+	protected _btn: HTMLButtonElement;
+	constructor(container: HTMLElement, act?: IAction) {
+		super('card', container);
 
-		const total = document.createElement('p');
-		total.textContent = `Общая сумма: ${this.total} руб.`;
-		basketContainer.appendChild(total);
-
-		return basketContainer;
+		this._index = ensureElement<HTMLElement>(elements.basket.itemIndex, container);
+		this._btn = ensureElement<HTMLButtonElement>(elements.basket.itemDelete, container);
+		this._btn.addEventListener('click', act.onClick);
+	}
+	set index(value: number) {
+		this.setText(this._index, value);
 	}
 }

@@ -1,41 +1,38 @@
-import { View } from './base/components';
-import { IEvents } from './base/events';
-import { ensureElement } from '../utils/utils';
+import { IPage } from "../types";
+import { settings, elements } from "../utils/constants";
+import { ensureElement } from "../utils/utils";
+import { Component } from "./base/abstract";
+import { IEvents } from "./base/events";
 
-interface IPage {
-	counter: number;
-	catalog: HTMLElement[];
-	locked: boolean;
-}
 
-export class Page extends View<IPage> {
-	protected _counter: HTMLElement;
-	protected _catalog: HTMLElement;
-	protected _wrapper: HTMLElement;
-	protected _basket: HTMLElement;
+export class Page extends Component<IPage> {
+  protected _counter: HTMLElement;
+  protected _catalogue: HTMLElement;
+  protected _wrapper: HTMLElement;
+  protected _basket: HTMLElement;
 
-	constructor(container: HTMLElement, events: IEvents) {
-		super(container, events);
+  constructor(container: HTMLElement, protected events: IEvents) {
+    super(container);
 
-		this._counter = ensureElement<HTMLElement>('.header__basket-counter');
-		this._catalog = ensureElement<HTMLElement>('.gallery');
-		this._wrapper = ensureElement<HTMLElement>('.page__wrapper');
-		this._basket = ensureElement<HTMLElement>('.header__basket');
+    const getElement = (selector: string) => ensureElement<HTMLElement>(selector, this.container);
 
-		this._basket.addEventListener('click', () => {
-			this.events.emit('basket:open');
-		});
-	}
+    this._counter = getElement(elements.page.counter);
+    this._catalogue = getElement(elements.page.gallery);
+    this._wrapper = getElement(elements.page.wrapper);
+    this._basket = getElement(elements.page.basket);
 
-	set counter(value: number) {
-		this.setText(this._counter, String(value));
-	}
+    this._basket.addEventListener('click', () => this.events.emit('basket:open'));
+  }
 
-	set catalog(items: HTMLElement[]) {
-		this._catalog.replaceChildren(...items);
-	}
+  set counter(value: number) {
+    this.setText(this._counter, String(value));
+  }
 
-	set locked(value: boolean) {
-		this.toggleClass(this._wrapper, 'page__wrapper_locked', value);
-	}
+  set catalogue(items: HTMLElement[]) {
+    this._catalogue.replaceChildren(...items);
+  }
+
+  set locked(value: boolean) {
+    this.toggleClass(this._wrapper, 'page__wrapper_locked', value);
+  }
 }
