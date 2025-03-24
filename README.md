@@ -48,6 +48,8 @@ yarn build
 Используемый паттерн проектирования
 Проект реализован на основе паттерна MVP. Взаимодействие между Моделью и Представлением реализовано через события пользователя.
 
+![image alt](https://github.com/Anastasiya-Kostyuchenko/web-larek-frontend/blob/main/Flowchart%20(2).jpg?raw=true)
+
 Основные классы
 
 Класс
