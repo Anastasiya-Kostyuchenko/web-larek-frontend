@@ -1,5 +1,3 @@
-import { popup } from '..';
-
 export const API_URL = `${process.env.API_ORIGIN}/api/weblarek`;
 export const CDN_URL = `${process.env.API_ORIGIN}/content/weblarek`;
 
@@ -26,8 +24,8 @@ export const elements = {
 		list: '.basket__list',
 		total: '.basket__price',
 		button: '.basket__button',
-		itemIndex:'.basket__item-index',
-		itemDelete: '.basket__item-delete'
+		itemIndex: '.basket__item-index',
+		itemDelete: '.basket__item-delete',
 	},
 	card: {
 		image: '.card__image',
@@ -37,7 +35,7 @@ export const elements = {
 	},
 	popup: {
 		error: '.form__errors',
-    closeBtn: '.modal__close',
-    content: '.modal__content'
+		closeBtn: '.modal__close',
+		cont: '.modal__content',
 	},
 };

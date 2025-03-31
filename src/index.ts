@@ -3,7 +3,6 @@ import './scss/styles.scss';
 import { State } from './components/state';
 import { EventEmitter } from './components/base/events';
 import { Basket, BasketItem } from './components/basket';
-import { apiCache, handleSuccess } from './components/cacheAPI';
 import { Card } from './components/card';
 import { Order, Contact } from './components/order';
 import { Page } from './components/page';
@@ -12,6 +11,7 @@ import { ProductAPI } from './components/productAPI';
 import { IProduct, IOrderForm } from './types';
 import { CDN_URL, API_URL, settings } from './utils/constants';
 import { ensureElement, cloneTemplate } from './utils/utils';
+import { handleSuccess, apiCache } from './components/cacheAPI';
 
 const api = new ProductAPI(CDN_URL, API_URL);
 const events = new EventEmitter();
@@ -34,14 +34,18 @@ const orderTemplate = ensureElement<HTMLTemplateElement>(
 const contactsTemplate = ensureElement<HTMLTemplateElement>(
 	`#${settings.contactsTmp}`
 );
+const popupTemplate = ensureElement<HTMLTemplateElement>(
+	`#${settings.modalContainerTmp}`
+);
 export const successTemplate = ensureElement<HTMLTemplateElement>(
 	`#${settings.successTmp}`
 );
 
 const state = new State({}, events);
 const page = new Page(document.body, events);
+
 export const popup = new PopupComponent(
-	ensureElement<HTMLElement>(`#${settings.modalContainerTmp}`),
+	popupTemplate,
 	events
 );
 
@@ -114,7 +118,7 @@ events.on('card:select', (item: IProduct) => {
 					},
 				});
 
-				card.isEmpty(state.order.items.includes(res.id));
+				card.nextStep(state.order.items.includes(res.id));
 
 				popup.render({
 					content: card.render({
@@ -206,7 +210,8 @@ events.on(
 
 api
 	.getProductList()
-	.then(state.setCatalogue.bind(state))
+	.then((items)=>{
+		state.setCatalogue.bind(state)})
 	.catch((err) => {
 		console.error(err);
 	});

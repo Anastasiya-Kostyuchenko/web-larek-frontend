@@ -21,7 +21,7 @@ export class ProductAPI extends Api implements IProductAPI {
     }));
   }
 
-  getProductList(): Promise<IProduct[]> {
+  async getProductList(): Promise<IProduct[]> {
     return this.get('/product').then((data: ApiListResponse<IProduct>) =>
       data.items.map((item) => ({
         ...item,

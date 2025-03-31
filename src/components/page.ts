@@ -1,5 +1,5 @@
 import { IPage } from "../types";
-import { settings, elements } from "../utils/constants";
+import { elements } from "../utils/constants";
 import { ensureElement } from "../utils/utils";
 import { Component } from "./base/abstract";
 import { IEvents } from "./base/events";

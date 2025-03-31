@@ -68,9 +68,6 @@ export type ContactsError = {
   phone?: string;
 };
 
-
-
-
 export interface IOrdersForm extends IState {
   items: string[];
   total: number;
