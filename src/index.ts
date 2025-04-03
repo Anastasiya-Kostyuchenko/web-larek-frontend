@@ -209,9 +209,8 @@ events.on(
 );
 
 api
-	.getProductList()
-	.then((items)=>{
-		state.setCatalogue.bind(state)})
-	.catch((err) => {
-		console.error(err);
-	});
+  .getProductList()
+  .then(state.setCatalogue.bind(state))
+  .catch((err) => {
+    console.error(err);
+  });
