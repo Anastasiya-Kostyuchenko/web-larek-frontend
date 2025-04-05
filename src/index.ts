@@ -44,10 +44,7 @@ export const successTemplate = ensureElement<HTMLTemplateElement>(
 const state = new State({}, events);
 const page = new Page(document.body, events);
 
-export const popup = new PopupComponent(
-	popupTemplate,
-	events
-);
+export const popup = new PopupComponent(popupTemplate, events);
 
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new Order(cloneTemplate(orderTemplate), events);
@@ -139,6 +136,9 @@ events.on('card:select', (item: IProduct) => {
 });
 
 events.on('order:open', () => {
+	const validation = state.isFilledFieldsOrder();
+	order.valid = validation;
+	order.errors = validation ? '' : 'Не заполнены обязательные поля';
 	popup.render({
 		content: order.render({
 			address: state.order.address,
@@ -149,6 +149,9 @@ events.on('order:open', () => {
 });
 
 events.on('contacts:open', () => {
+	const validation = state.isFilledFieldsContacts();
+	contact.valid = validation;
+	contact.errors = validation ? '' : 'Не заполнены обязательные поля';
 	popup.render({
 		content: contact.render({
 			email: state.order.email,
@@ -184,21 +187,15 @@ events.on('modal:close', () => {
 });
 
 events.on('order:submit', () => {
-	const cachedResult = apiCache[JSON.stringify(state.order)];
-	if (cachedResult) {
-		handleSuccess(cachedResult);
-	} else {
-		api
-			.orderProduct(state.order)
-			.then((res) => {
-				apiCache[JSON.stringify(state.order)] = res;
-				state.clearBasket();
-				handleSuccess(res);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}
+	api
+		.orderProduct(state.order)
+		.then((res) => {
+			state.clearBasket();
+			handleSuccess(res);
+		})
+		.catch((err) => {
+			console.error(err);
+		});
 });
 
 events.on(
@@ -209,8 +206,8 @@ events.on(
 );
 
 api
-  .getProductList()
-  .then(state.setCatalogue.bind(state))
-  .catch((err) => {
-    console.error(err);
-  });
+	.getProductList()
+	.then(state.setCatalogue.bind(state))
+	.catch((err) => {
+		console.error(err);
+	});
